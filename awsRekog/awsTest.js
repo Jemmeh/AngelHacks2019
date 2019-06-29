@@ -1,0 +1,1 @@
+var AWS = reqire('aws-sdk');

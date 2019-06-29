@@ -16,12 +16,20 @@ PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazo
 
 <body>
 	<H1>Age Estimator</H1>
-	<input type="file" name="fileToUpload" id="fileToUpload" accept="image/*">
+	<input type="file" name="fileToUpload1" id="fileToUpload1" accept="image/*">
+	<input type="file" name="fileToUpload2" id="fileToUpload2" accept="image/*">
 	<p id="opResult"></p>
 </body>
 <script>
-	document.getElementById("fileToUpload").addEventListener("change", function (event) {
-		ProcessImage();
+	var img1Bytes;
+	var img2Bytes;
+	document.getElementById("fileToUpload1").addEventListener("change", function (event) {
+		img1Bytes = ProcessImage("fileToUpload1");
+	}, false);
+	document.getElementById("fileToUpload2").addEventListener("change", function (event) {
+		img2Bytes = ProcessImage("fileToUpload2");
+		console.log("images encoded");
+		CompareFaces();
 	}, false);
 
 	//Calls DetectFaces API and shows estimated ages of detected faces
@@ -29,32 +37,32 @@ PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazo
 		AWS.region = "RegionToUse";
 		var rekognition = new AWS.Rekognition();
 		var params = {
-			SimilarityThreshold : 85,
-			SourceImage: {
-				Bytes: imageData1
+			"SourceImage": {
+				"Bytes": img1Bytes
 			},
-			TargetImage: {
-				Bytes: imageData2
-			}
+			"TargetImage": {
+				"Bytes": img2Bytes
+			},
+			"SimilarityThreshold": 85
 		};
-		rekognition.detectFaces(params, function (err, data) {
+		rekognition.compareFaces(params, function (err, data) {
 			if (err) console.log(err, err.stack); // an error occurred
 			else {
-				var table = "<table><tr><th>Low</th><th>High</th></tr>";
+				console.log(data.Confidence);
+				/*var table = "<table><tr><th>Low</th><th>High</th></tr>";
 				// show each face and build out estimated age table
-				for (var i = 0; i < data.FaceDetails.length; i++) {
-					table += '<tr><td>' + data.FaceDetails[i].AgeRange.Low +
-						'</td><td>' + data.FaceDetails[i].AgeRange.High + '</td></tr>';
+				for (var i = 0; i < data.FaceMatches.length; i++) {
+					table += '<tr><td>' + data.FaceMatches[i].Confidence + '</td></tr>';
 				}
 				table += "</table>";
-				document.getElementById("opResult").innerHTML = table;
+				document.getElementById("opResult").innerHTML = table;*/
 			}
 		});
 	}
 	//Loads selected image and unencodes image bytes for Rekognition DetectFaces API
-	function ProcessImage() {
+	function ProcessImage(imgID) {
 		AnonLog();
-		var control = document.getElementById("fileToUpload");
+		var control = document.getElementById(imgID);
 		var file = control.files[0];
 		// Load base64 encoded image
 		var reader = new FileReader();
@@ -66,6 +74,7 @@ PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazo
 				var jpg = true;
 				try {
 					image = atob(e.target.result.split("data:image/jpeg;base64,")[1]);
+					console.log("jpeg success");
 				} catch (e) {
 					jpg = false;
 				}
@@ -85,7 +94,9 @@ PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazo
 					ua[i] = image.charCodeAt(i);
 				}
 				//Call Rekognition
-				DetectFaces(imageBytes);
+				//CompareFaces(imageBytes);
+				console.log("imageBytes: success");
+				return (imageBytes);
 			};
 		})(file);
 		reader.readAsDataURL(file);

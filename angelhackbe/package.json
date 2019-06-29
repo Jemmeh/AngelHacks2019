@@ -9,14 +9,16 @@
   },
   "main": "server.js",
   "scripts": {
-    "test": "DEBUG='angelHack*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "start": "DEBUG='angelHack*' node server.js",
+    "test": "DEBUG='backend*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "start": "DEBUG='backend*' node server.js",
     "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.5",
     "cors": "^2.8.5",
     "coveralls": "^3.0.4",
     "debug": "^4.1.1",

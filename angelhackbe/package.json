@@ -1,0 +1,37 @@
+{
+  "name": "angelhackbe",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "12.4.0",
+    "yarn": "1.17.0",
+    "npm": "6.9.0"
+  },
+  "main": "server.js",
+  "scripts": {
+    "test": "DEBUG='angelHack*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "start": "DEBUG='angelHack*' node server.js",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "coveralls": "^3.0.4",
+    "debug": "^4.1.1",
+    "del": "^4.1.1",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.2",
+    "morgan": "^1.9.1",
+    "nyc": "^14.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "jest": "^24.8.0",
+    "superagent": "^5.1.0"
+  }
+}

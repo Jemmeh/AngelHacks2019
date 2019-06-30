@@ -8,99 +8,185 @@ PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazo
 <head>
 	<script src="aws-cognito-sdk.min.js"></script>
 	<script src="amazon-cognito-identity.min.js"></script>
-	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
+	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.485.0.min.js"></script>
 	<script src="./app.js"></script>
 	<meta charset="UTF-8">
 	<title>Rekognition</title>
+	<style>
+		#container {
+			margin: 0px auto;
+			width: 500px;
+			height: 375px;
+			border: 10px #333 solid;
+		}
+		#videoElement {
+			width: 500px;
+			height: 375px;
+			background-color: #666;
+		}
+	</style>
 </head>
 
 <body>
-	<H1>Age Estimator</H1>
-	<input type="file" name="fileToUpload1" id="fileToUpload1" accept="image/*">
-	<input type="file" name="fileToUpload2" id="fileToUpload2" accept="image/*">
-	<p id="opResult"></p>
+	<H1>AWS Rekognition Tests</H1>
+	<title>Display Webcam Stream</title>
+	<div id="container">
+		<video autoplay="true" id="videoElement"></video>
+	</div>
+	<canvas id="canvas"></canvas>
+	<div class="output">
+		<img id="DL">
+		<img id="selfie">
+	</div>
+	<button id="button1">Take Photo</button>
+	<h1 id='info'></h1>
+	<h2 id='score'></h2>
 </body>
 <script>
-	var img1Bytes;
-	var img2Bytes;
-	document.getElementById("fileToUpload1").addEventListener("change", function (event) {
-		img1Bytes = ProcessImage("fileToUpload1");
-	}, false);
-	document.getElementById("fileToUpload2").addEventListener("change", function (event) {
-		img2Bytes = ProcessImage("fileToUpload2");
-		console.log("images encoded");
-		CompareFaces();
+	var streaming = false;
+	var canvas = null;
+	var DLphoto = null;
+	var selfPhoto = null;
+	var startbutton = null;
+	var data = null;
+	var data2 = null;
+	var track = null;
+	var width = 320;    // We will scale the photo width to this
+	var height = 0;     // This will be computed based on the input stream
+
+	canvas = document.getElementById("canvas");
+	DLphoto = document.getElementById("DL");
+	selfPhoto = document.getElementById("selfie");
+	startbutton = document.getElementById("button1");
+	var video = document.querySelector("#videoElement");
+	var track;
+
+	if (navigator.mediaDevices.getUserMedia) {
+	navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+		.then(function (stream) {
+			video.srcObject = stream;
+			track = stream.getTracks()[0];
+			video.play();
+		})
+		.catch(function (err) {
+		console.log("Something went wrong!" + err);
+		});
+	}
+	
+	video.addEventListener('canplay', function(ev){
+		if(!streaming) {
+			height = video.videoHeight/(video.videoWidth/width);
+
+			video.setAttribute('width', width);
+			video.setAttribute('height', height);
+			canvas.setAttribute('width', width);
+			canvas.setAttribute('height', height);
+			streaming = true;
+		}
 	}, false);
 
-	//Calls DetectFaces API and shows estimated ages of detected faces
-	function CompareFaces(imageData1, imageData2) {
+	startbutton.addEventListener('click', function(ev){
+		if (data == null || data2 == null)
+			takePicture();
+		else {
+			//track.stop();
+			processImage();
+			CompareFaces();
+		}
+		ev.preventDefault();
+	}, false);
+	
+	function processImage() {
+		data = getBinary(data);
+		data2 = getBinary(data2);
+	}
+
+	function getBinary(encodedFile) {
+        var base64Image = encodedFile.split("data:image/png;base64,")[1];
+        var binaryImg = atob(base64Image);
+        var length = binaryImg.length;
+        var ab = new ArrayBuffer(length);
+        var ua = new Uint8Array(ab);
+        for (var i = 0; i < length; i++) {
+          ua[i] = binaryImg.charCodeAt(i);
+        }
+
+        var blob = new Blob([ab], {
+          type: "image/png"
+        });
+
+        return ab;
+      }
+
+	function takePicture() {
+		var context = canvas.getContext('2d');
+		if (width && height) {
+			canvas.width = width;
+			canvas.height = height;
+			context.drawImage(video, 0, 0, width, height);
+
+			if (data == null)
+				data = canvas.toDataURL('image/png');
+			else if (data2 == null)
+				data2 = canvas.toDataURL('image/png');
+			DLphoto.setAttribute('src', data);
+		}
+	}
+
+	function getText() {
+		AnonLog();
 		AWS.region = "RegionToUse";
 		var rekognition = new AWS.Rekognition();
 		var params = {
-			"SourceImage": {
-				"Bytes": img1Bytes
+			Image: {
+				Bytes: data
+			}
+		}
+		rekognition.detectText(params, function (err, data3) {
+			if(err) console.log(err, err.stack);
+			else {
+				var x = 0;
+				console.log(data3);
+				var addText = document.getElementById('info')
+				for(var i = 0; i < data3.TextDetections.length; i++)
+				{
+					if (data3.TextDetections[i].DetectedText.includes("Y")) {
+						if (x == 1)
+							addText.textContent += data3.TextDetections[i].DetectedText + " ";
+						else
+							x++;
+
+					}
+				}
+			}
+		});
+	}
+
+	function CompareFaces() {
+		AnonLog();
+		AWS.region = "RegionToUse";
+		var rekognition = new AWS.Rekognition();
+		console.log("cf: " + data);
+		var params = {
+			SourceImage: {
+				Bytes: data
 			},
-			"TargetImage": {
-				"Bytes": img2Bytes
+			TargetImage: {
+				Bytes: data2
 			},
 			"SimilarityThreshold": 85
 		};
 		rekognition.compareFaces(params, function (err, data) {
 			if (err) console.log(err, err.stack); // an error occurred
 			else {
-				console.log(data.Confidence);
-				/*var table = "<table><tr><th>Low</th><th>High</th></tr>";
-				// show each face and build out estimated age table
-				for (var i = 0; i < data.FaceMatches.length; i++) {
-					table += '<tr><td>' + data.FaceMatches[i].Confidence + '</td></tr>';
-				}
-				table += "</table>";
-				document.getElementById("opResult").innerHTML = table;*/
+				console.log(data);
+				var addText = document.getElementById('score');
+				addText.textContent += data.FaceMatches[0].Similarity;
+				getText();
 			}
 		});
 	}
-	//Loads selected image and unencodes image bytes for Rekognition DetectFaces API
-	function ProcessImage(imgID) {
-		AnonLog();
-		var control = document.getElementById(imgID);
-		var file = control.files[0];
-		// Load base64 encoded image
-		var reader = new FileReader();
-		reader.onload = (function (theFile) {
-			return function (e) {
-				var img = document.createElement('img');
-				var image = null;
-				img.src = e.target.result;
-				var jpg = true;
-				try {
-					image = atob(e.target.result.split("data:image/jpeg;base64,")[1]);
-					console.log("jpeg success");
-				} catch (e) {
-					jpg = false;
-				}
-				if (jpg == false) {
-					try {
-						image = atob(e.target.result.split("data:image/png;base64,")[1]);
-					} catch (e) {
-						alert("Not an image file Rekognition can process");
-						return;
-					}
-				}
-				//unencode image bytes for Rekognition DetectFaces API
-				var length = image.length;
-				imageBytes = new ArrayBuffer(length);
-				var ua = new Uint8Array(imageBytes);
-				for (var i = 0; i < length; i++) {
-					ua[i] = image.charCodeAt(i);
-				}
-				//Call Rekognition
-				//CompareFaces(imageBytes);
-				console.log("imageBytes: success");
-				return (imageBytes);
-			};
-		})(file);
-		reader.readAsDataURL(file);
-	}
+
 	//Provides anonymous log on to AWS services
 	function AnonLog() {
 

@@ -1,11 +1,12 @@
 import React from "react";
 import Webcam from "react-webcam";
 import AWS from "aws-sdk";
+import "./styles.css";
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: "AKIASDJ7LHTVDQBR6YGV",
-  secretAccessKey: "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"
+  accessKeyId: "AKIASDJ7LHTVBRN5KDHM",
+  secretAccessKey: "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"
 });
 
 const rekog = new AWS.Rekognition();
@@ -44,7 +45,7 @@ class Video extends React.Component {
     let canvas = this.refs.canvas;
     canvas
       .getContext("2d")
-      .drawImage(this.refs.video, 0, 0, 300, 300, 0, 0, 300, 300);
+      .drawImage(this.refs.video, 0, 0, window.innerWidth, window.innerHeight);
     this.validateImg(canvas.toDataURL("image/jpeg"));
   };
 
@@ -133,6 +134,12 @@ class Video extends React.Component {
           let num = 90;
           if (similarity >= num) {
             console.log("Match");
+            this.setState({
+              images: {
+                img1: null,
+                img2: null
+              }
+            });
           } else {
             console.log("Not A Match!");
           }
@@ -158,12 +165,17 @@ class Video extends React.Component {
 
   render() {
     return (
-      <div>
-        <video autoPlay={true} ref="video" />
-        <button type="button" onClick={this.takePicture}>
+      <div className="cameraView">
+        <video className="fullWidth" autoPlay={true} ref="video" />
+        <button className="button" type="button" onClick={this.takePicture}>
           Take Picture
         </button>
-        <canvas width="300" height="300" ref="canvas" />
+        <canvas
+          className="picture"
+          width={window.innerWidth}
+          height={window.innerHeight}
+          ref="canvas"
+        />
       </div>
     );
   }

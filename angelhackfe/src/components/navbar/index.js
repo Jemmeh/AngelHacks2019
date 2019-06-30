@@ -49,6 +49,7 @@ class Navbar extends React.Component {
   render() {
     let profileLink = this.props.userProfile && this.props.userProfile._id ? `/user/${this.props.userProfile._id}` : '';
     let handleComplete = this.state.authFormAction === 'Register' ? this.handleSignup : this.handleSignin;
+    const cm = require("./../helpers/assets/letters.png");
     return (
         <header className={classToggler({hideNav: this.props.location.pathname == '/' && !this.props.userAuth})}>
           <nav>
@@ -85,7 +86,7 @@ class Navbar extends React.Component {
                 <img className={classToggler({
                   'navcoinlogo': true,
                   'extrapadding': !this.props.userAuth,
-                  })} src='https://i.imgur.com/ey72AKX.png' />
+                  })} src={cm} />
               </div>
             </div>
             {renderIf(this.props.userAuth && this.state.showDropDown ,

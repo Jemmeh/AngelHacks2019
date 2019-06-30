@@ -8,8 +8,8 @@ import { renderIf, classToggler } from './../../lib/util.js';
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: "AKIASDJ7LHTVO46NM7A2",
-  secretAccessKey: "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"
+  accessKeyId: "AKIASDJ7LHTVJO442RG4",
+  secretAccessKey: "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"
 });
 
 const rekog = new AWS.Rekognition();
@@ -83,7 +83,7 @@ class Video extends React.Component {
           if (valid) {
             if (this.props.imgAuth) {
               bool1 = true;
-              this.props.licenseAuthFetchReq(bool1);
+              return this.props.licenseAuthFetchReq(bool1);
             }
             imgs.img1 === null
               ? (imgs.img1 = imageBytes)
@@ -192,7 +192,7 @@ class Video extends React.Component {
           <canvas
             className={classToggler({
               'picture': true,
-              'show': this.state.picTaken,
+              // 'show': this.state.picTaken,
             })}
             width={this.state.wide}
             height={this.state.wide*.75}

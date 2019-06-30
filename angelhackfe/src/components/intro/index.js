@@ -11,14 +11,20 @@ import { logError, renderIf } from './../../lib/util.js';
 class Intro extends React.Component {
   constructor(props){
     super(props);
-    this.state = { authFormAction: 'Sign Up', formDisplay: false, };
+    this.state = { authFormAction: 'Sign Up', formDisplay: false, step: 0 };
   }
+
+  componentWillUnmount() {
+    this.setState({ authFormAction: 'Sign Up', formDisplay: false, step: 0 });
+  }
+
   handleSignin = (user, errCB) => {
     return this.props.signIn(user)
       .then(() => {
         return this.props.userProfileFetch()
           .catch(err => logError(err));
       })
+      // .then(() => this.handleStep(1))
       .catch(err => {
         logError(err);
         errCB(err);
@@ -30,11 +36,17 @@ class Intro extends React.Component {
         return this.props.userProfileFetch()
           .catch(err => logError(err));
       })
+      // .then(() => this.handleStep(1))
       .catch(err => {
         logError(err);
         errCB(err);
     });
   };
+
+  // handleStep = num => {
+  //   setTimeout(() => this.setState({ step: num }), 3000);
+  // };
+
   render() {
     let handleComplete = this.state.authFormAction === 'Sign Up' ? this.handleSignup : this.handleSignin;
     const drsImage = require("./../helpers/assets/drs.jpg");
@@ -83,15 +95,31 @@ class Intro extends React.Component {
         {renderIf(this.state.formDisplay,
             <div>
               <Modal heading='Olympic App' authFormAction={this.state.authFormAction} close={() => this.setState({ formDisplay: false })}>
-                <UserAuthForm authFormAction={this.state.authFormAction} onComplete={handleComplete} />
-                {/* <div className='userauth-buttons'>
-                  {renderIf(this.state.authFormAction==='Sign In',
-                    <button className='formButton darkButton' onClick={() => this.setState({authFormAction: 'Sign Up'})}>Create Account</button>
-                  )}
-                  {renderIf(this.state.authFormAction==='Sign Up',
-                    <button className='formButton darkButton' onClick={() => this.setState({authFormAction: 'Sign In'})}>Sign In</button>
-                  )}
-                </div> */}
+                {renderIf(this.state.formDisplay && !this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth,
+                  <div>
+                    <UserAuthForm authFormAction={this.state.authFormAction} onComplete={handleComplete} />
+                  </div>
+                )}
+                {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth,
+                  <div>
+                    {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 0,
+                      <div className='stepDiv step1'>
+                        <p>Before we get going lets authenticate your identity.</p>
+                        <p>It's a 3 step process, have your ID ready.</p>
+                        <button onClick={() => this.setState({ step: 1 })}>Proceed</button>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
+                      <div className='facialStep authStep'>
+                        <p className='authStepHead'>Facial Verification</p>
+
+                        <p className='authStepDetail'>
+                          Look straight at the screen.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </Modal>
             </div>
           )}
@@ -102,6 +130,8 @@ class Intro extends React.Component {
 
 let mapStateToProps = state => ({
   userAuth: state.userAuth,
+  imgAuth: state.imgAuth,
+  licenseAuth: state.licenseAuth,
   userProfile: state.userProfile,
 });
 

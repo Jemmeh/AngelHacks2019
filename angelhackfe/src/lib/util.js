@@ -16,8 +16,11 @@ export const userValidation = props => {
       if(token) {
         props.tokenSignIn(token)
           .then(() => {
-            return props.userProfileFetch()
-              .catch(() => logError);
+            if (this.props.licenseAuth && this.props.imgAuth){
+              return props.userProfileFetch()
+                .catch(() => logError);
+            }
+            return ;
           })
           .catch(() => {
             logError;

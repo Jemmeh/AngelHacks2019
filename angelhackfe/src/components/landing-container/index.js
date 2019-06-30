@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import { tokenSignInRequest } from '../../actions/userAuth-actions.js';
 import { userProfileFetchRequest, userProfileUpdateRequest } from '../../actions/userProfile-actions.js';
+import { imgAuthFetch } from '../../actions/imgAuth-actions.js';
+import { licenseAuthFetch } from '../../actions/licenseAuth-actions.js';
 import Intro from '../intro';
 import UserProfileForm from '../userProfile-form';
 import Modal from '../helpers/modal';
@@ -27,10 +28,10 @@ class LandingContainer extends React.Component {
     let profileAction ='create';
     return (
       <section className='landingContainer container-outer'>
-        {renderIf(!this.props.userAuth,
+        {renderIf(!this.props.userAuth || !this.props.imgAuth || !this.props.licenseAuth,
             <Intro />
         )}
-        {renderIf(this.props.userAuth,
+        {renderIf(this.props.userAuth && this.props.imgAuth && this.props.licenseAuth,
           <div>
             <p> Logged in! </p>
             {renderIf(this.state.profileFormDisplay && this.props.userProfile && this.props.userProfile.lastLogin === this.props.userProfile.createdOn,
@@ -48,6 +49,8 @@ class LandingContainer extends React.Component {
 
 let mapStateToProps = state => ({
   userAuth: state.userAuth,
+  imgAuth: state.imgAuth,
+  licenseAuth: state.licenseAuth,
   userProfile: state.userProfile,
 });
 
@@ -55,6 +58,8 @@ let mapDispatchToProps = dispatch => ({
   tokenSignIn: token => dispatch(tokenSignInRequest(token)),
   userProfileFetch: () => dispatch(userProfileFetchRequest()),
   userProfileUpdate: profile => dispatch(userProfileUpdateRequest(profile)),
+  imgAuthFetchReq: bool => dispatch(imgAuthFetch(bool)),
+  licenseAuthFetchReq: bool => dispatch(licenseAuthFetch(bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingContainer);

@@ -1,5 +1,4 @@
 import React from "react";
-import Webcam from "react-webcam";
  
 class Video extends React.Component {
   constructor(props){

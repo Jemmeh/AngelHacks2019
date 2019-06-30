@@ -7,3 +7,87 @@
       left: 10px;
     }
   }
+
+
+  .authFormHeader {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    line-height: 50px;
+    width: 100vw;
+    position: relative;
+
+    p {
+      text-align: center;
+      color: #3a3b3f;
+      font-weight: 600;
+
+      span {
+        color: #90949c;
+        position: absolute;
+        left: 15px;
+        font-size: 15px;
+      }
+    }
+  }
+  .afLogodiv {
+    margin: 15px;
+    text-align: center;
+    p {
+      text-align: center;
+      display: inline-block;
+
+      span {
+        width: 40px;
+        height: 40px;
+        background: #094b7c;
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        background: #094b7c;
+        color: #fff;
+        display: block;
+        line-height: 40px;
+        text-align: center;
+        font-weight: 700;
+        margin-right: 3px;
+      }
+    }
+  }
+  
+  .modal-wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: #f9f9f9;
+    border-radius: 0;
+
+    .modal-content {
+      padding: 0 5px;
+    
+      form {
+        width: 100%;
+    
+        input {
+          width: 100%;
+          background: #fff;
+          border-radius: 0;
+          border: 1px solid #eee;
+          padding: 8px 45px;
+        }
+        button {
+          line-height: 35px;
+          color: #fff;
+          width: 100%;
+          border: none;
+          background: #90949c;
+          background: rgba(144, 148, 156,.2);
+          font-weight: 600;
+          letter-spacing: .5px;
+          line-height: 39px;
+        }
+        .readyButton {
+          background: #90949c;
+        }
+      }
+    }
+  }

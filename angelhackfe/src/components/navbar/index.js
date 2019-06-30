@@ -50,7 +50,7 @@ class Navbar extends React.Component {
     let profileLink = this.props.userProfile && this.props.userProfile._id ? `/user/${this.props.userProfile._id}` : '';
     let handleComplete = this.state.authFormAction === 'Register' ? this.handleSignup : this.handleSignin;
     return (
-        <header>
+        <header className={classToggler({hideNav: this.props.location.pathname == '/' && !this.props.userAuth})}>
           <nav>
           {renderIf(this.props.userAuth && this.state.showDropDown ,
               <div className='grayedoutnav' onClick={() => this.setState({ showDropDown: false })}></div>

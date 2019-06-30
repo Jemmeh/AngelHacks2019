@@ -136,12 +136,16 @@
       -webkit-appearance: none;
       appearance: none;
     }
-    input:active, input:focus {
-      border: 1px solid #111;
-      box-shadow: 0 0 5px #afafaf;
-      -webkit-box-shadow: 0 0 5px #afafaf;
-      transition: box-shadow .5s,border-color .25s ease-in-out;
+    .username-availability {
+      position: absolute;
+      margin-top: -22px;
     }
+    // input:active, input:focus {
+    //   border: 1px solid #111;
+    //   box-shadow: 0 0 5px #afafaf;
+    //   -webkit-box-shadow: 0 0 5px #afafaf;
+    //   transition: box-shadow .5s,border-color .25s ease-in-out;
+    // }
   }
   .buttonAuthFormParentDiv {
     width: 74vw;

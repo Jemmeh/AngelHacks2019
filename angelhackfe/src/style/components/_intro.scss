@@ -1,0 +1,62 @@
+.entryPage {
+  height: 100vh;
+  position: relative;
+
+  .drsImage {
+    width: 100vw;
+    height: auto;
+    border-bottom: 2px solid #f9f9f9;
+    padding-bottom: 20px;
+  }
+  .blueSquare {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #094b7c;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -21px;
+
+    span {
+      line-height: 40px;
+      color: #fff;
+      display: block;
+      text-align: center;
+      font-weight: 700;
+    }
+  }
+  .entryText {
+    padding: 35px 5px;
+    p {
+      color: #3a3b3f;
+      font-size: 16px;
+      line-height: 1.19;
+      text-align: center;
+    }
+  }
+  .signUpSignInDiv {
+    position: absolute;
+    bottom: 50px;
+    height: 50px;
+    border-top: 1px solid #f9f9f9;
+    white-space: nowrap;
+    line-height: 50px;
+    width: 100vw;
+
+    p {
+      .signIn {
+        color: #3a3b3f;
+        margin-left: 25px;
+        font-weight: 600;
+      }
+      .signUp {
+        float: right;
+        margin-right: 25px;
+        font-weight: 600;
+        color: #2b90b9;
+      }
+    }
+  }
+}

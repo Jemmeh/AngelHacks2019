@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.485.0",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.5",
     "cors": "^2.8.5",

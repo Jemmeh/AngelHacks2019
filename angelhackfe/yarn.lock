@@ -1084,6 +1084,11 @@ agentkeepalive@^3.4.1:
   dependencies:
     humanize-ms "^1.2.1"
 
+agora-rtc-sdk@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/agora-rtc-sdk/-/agora-rtc-sdk-2.7.0.tgz#cbb234b252a7ea9d1e6d2c264ca60fd6600a2626"
+  integrity sha512-8eA0cdNKXnwJ9aYUH/L7wPXVLgFmDqPFbX4TGq1t1oTTn1p2M33KyTIGfidyXd3rokY6D4kzKYpIGoqW1iqTew==
+
 airbnb-prop-types@^2.13.2:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/airbnb-prop-types/-/airbnb-prop-types-2.13.2.tgz#43147a5062dd2a4a5600e748a47b64004cc5f7fc"

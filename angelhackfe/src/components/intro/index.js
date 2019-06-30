@@ -7,6 +7,7 @@ import { userProfileFetchRequest } from '../../actions/userProfile-actions.js';
 import { allAuthFetch } from '../../actions/allAuth-actions.js';
 import Modal from '../helpers/modal';
 import UserAuthForm from '../userAuth-form';
+import Video from '../video';
 import { logError, renderIf } from './../../lib/util.js';
 
 class Intro extends React.Component {
@@ -115,6 +116,7 @@ class Intro extends React.Component {
                     )}
                     {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
                       <div className='facialStep authStep'>
+                        <Video />
                         {/* after verified face,   call this.handleStep(2) */}
                         <p className='authStepDetail'>
                           Look straight at the screen.

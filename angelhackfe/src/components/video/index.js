@@ -1,7 +1,7 @@
 import React from "react";
-import Webcam from "react-webcam";
 import AWS from "aws-sdk";
-import "./styles.css";
+
+import { renderIf } from './../../lib/util.js';
 
 AWS.config.update({
   region: "us-east-1",
@@ -21,7 +21,9 @@ class Video extends React.Component {
         img2: null
       },
       imgConfidence: 0,
-      params: {}
+      params: {},
+      wide: 0,
+      picTaken: false,
     };
   }
 
@@ -39,13 +41,15 @@ class Video extends React.Component {
         this.videoError
       );
     }
+    this.setState({wide: this.refs.video.getBoundingClientRect().width });
   }
 
   takePicture = () => {
+    this.setState({picTaken: true});
     let canvas = this.refs.canvas;
     canvas
       .getContext("2d")
-      .drawImage(this.refs.video, 0, 0, window.innerWidth, window.innerHeight);
+      .drawImage(this.refs.video, 0, 0, this.state.wide, this.state.wide*.75);
     this.validateImg(canvas.toDataURL("image/jpeg"));
   };
 
@@ -167,15 +171,17 @@ class Video extends React.Component {
     return (
       <div className="cameraView">
         <video className="fullWidth" autoPlay={true} ref="video" />
-        <button className="button" type="button" onClick={this.takePicture}>
+        <button type="button" onClick={this.takePicture}>
           Take Picture
         </button>
-        <canvas
-          className="picture"
-          width={window.innerWidth}
-          height={window.innerHeight}
-          ref="canvas"
-        />
+        {renderIf(this.state.picTaken,
+          <canvas
+            className="picture"
+            width={this.state.wide}
+            height={this.state.wide*.75}
+            ref="canvas"
+          />
+        )}
       </div>
     );
   }

@@ -7,6 +7,7 @@ import { userProfileFetchRequest, userProfileUpdateRequest } from '../../actions
 import Intro from '../intro';
 import UserProfileForm from '../userProfile-form';
 import Modal from '../helpers/modal';
+import Video from '../video';
 import { userValidation, logError, renderIf } from './../../lib/util.js';
 
 class LandingContainer extends React.Component {
@@ -39,6 +40,7 @@ class LandingContainer extends React.Component {
             )}
           </div>
         )}
+        <Video />
       </section>
     );
   }

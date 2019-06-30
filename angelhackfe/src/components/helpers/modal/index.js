@@ -21,6 +21,12 @@ class Modal extends React.Component {
             {(renderIf(this.props.step === 1,
               <p>Facial Verification</p>
             ))}
+            {(renderIf(this.props.step === 2,
+              <p>Step 1 Complete</p>
+            ))}
+            {(renderIf(this.props.step === 3,
+              <p>ID Verification</p>
+            ))}
           </div>
           {/* <div className='afLogodiv'>
             <p><span>My</span></p>

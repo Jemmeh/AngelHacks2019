@@ -78,9 +78,9 @@ class Navbar extends React.Component {
                   </div>
                 )}
                 {renderIf(this.props.userAuth,
-                  <div className='coins'>
-                    <p> 10.63 </p>
-                  </div>
+                  // <div className='coins'>
+                  //   <p> 10.63 </p>
+                  // </div>
                 )}
                 <img className={classToggler({
                   'navcoinlogo': true,

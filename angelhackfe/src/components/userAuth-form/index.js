@@ -21,9 +21,9 @@ class UserAuthForm extends React.Component {
       submitted: false,
     };
   }
-  componentWillUnmount() {
-    this.setState({ username: '', email: '', password: '' });
-  }
+  // componentWillUnmount() {
+  //   this.setState({ username: '', email: '', password: '' });
+  // }
   validateInput = e => {
     let { name, value } = e.target;
 

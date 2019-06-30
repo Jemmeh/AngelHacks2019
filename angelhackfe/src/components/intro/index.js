@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
 
 import { signUpRequest, signInRequest } from '../../actions/userAuth-actions.js';
 import { userProfileFetchRequest } from '../../actions/userProfile-actions.js';
 import { allAuthFetch } from '../../actions/allAuth-actions.js';
+import { imgAuthFetch } from '../../actions/imgAuth-actions.js';
+import { licenseAuthFetch } from '../../actions/licenseAuth-actions.js';
 import Modal from '../helpers/modal';
 import UserAuthForm from '../userAuth-form';
 import Video from '../video';
@@ -45,15 +46,23 @@ class Intro extends React.Component {
     });
   };
 
+  last = () => {
+    let bool = true;
+    // this.setState({ step:  });
+    this.props.allAuthFetchReq(bool);
+  };
+
   handleStep = num => {
-    setTimeout(() => this.setState({ step: num }), 3000);
+    this.setState({ step: num });
   };
 
   render() {
     let handleComplete = this.state.authFormAction === 'Sign Up' ? this.handleSignup : this.handleSignin;
     const drsImage = require("./../helpers/assets/drs.jpg");
     const letters = require("./../helpers/assets/letters.png");
-    let bool = this.state.step === 5 ? true : false;
+    const cm = require("./../helpers/assets/check.svg");
+    const uncheck = require("./../helpers/assets/uncheck.png");
+    let bool = this.state.step === 4 ? true : false;
     return (
       // <div className="intro">
       //   <section id="introView" className="view introView">
@@ -105,64 +114,52 @@ class Intro extends React.Component {
                     <UserAuthForm authFormAction={this.state.authFormAction} onComplete={handleComplete} />
                   </div>
                 )}
-                {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth,
+                {renderIf(this.state.formDisplay && this.props.userAuth,
                   <div>
                     {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 0,
                       <div className='stepDiv step1'>
                         <p>Before we get going lets authenticate your identity.</p>
-                        <p>It's a 3 step process, have your ID ready.</p>
+                        <p>It's a 2 step process, have your ID ready.</p>
                         <button onClick={() => this.setState({ step: 1 })}>Proceed</button>
                       </div>
                     )}
                     {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
                       <div className='facialStep authStep'>
-                        <Video />
+                        <Video match={this.handleStep}/>
                         {/* after verified face,   call this.handleStep(2) */}
                         <p className='authStepDetail'>
                           Look straight at the screen.
                         </p>
                       </div>
                     )}
-                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
+                    {/* {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
                       <div className='loadingDiv'>
                         <p><span className='scale-up-center'></span>checking</p>
                       </div>
-                    )}
-                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 2,
+                    )} */}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step == 2,
                       <div className='stepDiv step2'>
-                        <label><input type="radio" checked={true} editable={false}/> Face</label>
-                        <label><input type="radio" editable={false}/> ID</label>
-                        <button onClick={() => this.setState({ step: 3 })}>Next</button>
+                        <p>
+                          <label> <img src={cm}/> Face</label>
+                          <label> <img src={uncheck} className='uncheck'/> ID</label>
+                          <button onClick={() => this.setState({ step: 3 })}>Next</button>
+                        </p>
                       </div>
                     )}
                     {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 3,
                       <div className='idStep authStep'>
-                        <p className='authStepHead'>ID Verification</p>
                         {/* after verified face,   set this.state.step 4 */}
+                        <Video match={() => this.setState({ step: 4 })}/>
                         <p className='authStepDetail'>
                           On a flat surface photograph the front of your ID.
                         </p>
                       </div>
                     )}
-                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 4,
-                      <div className='idStep authStep'>
-                        <p className='authStepHead'>ID Verification</p>
-                        {/* after verified license,   call this.handleStep(5) */}
-                        <p className='authStepDetail'>
-                          On a flat surface photograph the back of your ID.
-                        </p>
-                      </div>
-                    )}
-                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && this.props.licenseAuth && this.state.step === 4,
-                      <div className='loadingDiv'>
-                        <p><span className='scale-up-center'></span>checking</p>
-                      </div>
-                    )}
-                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && this.props.licenseAuth && this.state.step === 5,
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && this.props.licenseAuth,
                       <div className='stepDiv step2'>
-                        <label><input type="radio" checked={true} editable={false}/> Face</label>
-                        <label><input type="radio" checked={true} editable={false}/> ID</label>
-                      <button onClick={this.props.allAuthFetchReq(bool)}>Next</button>
+                        <label> <img src={cm}/> Face</label>
+                        <label> <img src={cm}/> ID</label>
+                      <button onClick={this.last}>Next</button>
                     </div>
                     )}
                   </div>
@@ -179,6 +176,7 @@ let mapStateToProps = state => ({
   userAuth: state.userAuth,
   imgAuth: state.imgAuth,
   licenseAuth: state.licenseAuth,
+  allAuth: state.allAuth,
   userProfile: state.userProfile,
 });
 
@@ -188,6 +186,8 @@ let mapDispatchToProps = dispatch => {
     signIn: user => dispatch(signInRequest(user)),
     userProfileFetch: () => dispatch(userProfileFetchRequest()),
     allAuthFetchReq: bool => dispatch(allAuthFetch(bool)),
+    imgAuthFetchReq: bool => dispatch(imgAuthFetch(bool)),
+    licenseAuthFetchReq: bool => dispatch(licenseAuthFetch(bool)),
   };
 };
 

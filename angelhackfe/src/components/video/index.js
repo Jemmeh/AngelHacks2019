@@ -1,12 +1,15 @@
 import React from "react";
+import { connect } from 'react-redux';
 import AWS from "aws-sdk";
 
-import { renderIf } from './../../lib/util.js';
+import { imgAuthFetch } from '../../actions/imgAuth-actions.js';
+import { licenseAuthFetch } from '../../actions/licenseAuth-actions.js';
+import { renderIf, classToggler } from './../../lib/util.js';
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: "AKIASDJ7LHTVBRN5KDHM",
-  secretAccessKey: "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"
+  accessKeyId: "AKIASDJ7LHTVO46NM7A2",
+  secretAccessKey: "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"
 });
 
 const rekog = new AWS.Rekognition();
@@ -47,9 +50,7 @@ class Video extends React.Component {
   takePicture = () => {
     this.setState({picTaken: true});
     let canvas = this.refs.canvas;
-    canvas
-      .getContext("2d")
-      .drawImage(this.refs.video, 0, 0, this.state.wide, this.state.wide*.75);
+    this.refs.canvas.getContext("2d").drawImage(this.refs.video, 0, 0, this.state.wide, this.state.wide*.75);
     this.validateImg(canvas.toDataURL("image/jpeg"));
   };
 
@@ -64,6 +65,9 @@ class Video extends React.Component {
       Attributes: ["ALL"]
     };
     var valid = 0;
+    let num = 1;
+    let bool = false;
+    let bool1 = false;
     rekog.detectFaces(params, (err, data) => {
       if (err) console.log(err);
       else {
@@ -77,6 +81,8 @@ class Video extends React.Component {
           valid = confidence > num ? 1 : 0;
           console.log("val :", valid);
           if (valid) {
+            bool1 = true;
+            this.props.licenseAuthFetchReq(bool1);
             imgs.img1 === null
               ? (imgs.img1 = imageBytes)
               : (imgs.img2 = imageBytes);
@@ -85,7 +91,11 @@ class Video extends React.Component {
             if (imgs.img2) {
               this.validateFaces();
             } else {
-              alert("Take Picture of Valid ID");
+              num = 2;
+              bool = true;
+              this.props.imgAuthFetchReq(bool);
+              return this.props.match(num);
+              // alert("Take Picture of Valid ID");
             }
           } else {
             console.log("not valid");
@@ -118,6 +128,7 @@ class Video extends React.Component {
   };
 
   validateFaces = () => {
+    let bool = false;
     let images = this.state.images;
     let params = {
       SimilarityThreshold: 85,
@@ -144,6 +155,7 @@ class Video extends React.Component {
                 img2: null
               }
             });
+            return this.props.match;
           } else {
             console.log("Not A Match!");
           }
@@ -174,17 +186,35 @@ class Video extends React.Component {
         <button type="button" onClick={this.takePicture}>
           Take Picture
         </button>
-        {renderIf(this.state.picTaken,
+        {/* {renderIf(this.state.picTaken, */}
           <canvas
-            className="picture"
+            className={classToggler({
+              'picture': true,
+              'show': this.state.picTaken,
+            })}
             width={this.state.wide}
             height={this.state.wide*.75}
             ref="canvas"
           />
-        )}
+        {/* )} */}
       </div>
     );
   }
 }
 
-export default Video;
+let mapStateToProps = state => ({
+  userAuth: state.userAuth,
+  imgAuth: state.imgAuth,
+  licenseAuth: state.licenseAuth,
+  allAuth: state.allAuth,
+});
+
+let mapDispatchToProps = dispatch => {
+  return {
+    imgAuthFetchReq: bool => dispatch(imgAuthFetch(bool)),
+    licenseAuthFetchReq: bool => dispatch(licenseAuthFetch(bool)),
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Video);

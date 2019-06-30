@@ -70,38 +70,26 @@ class Navbar extends React.Component {
                 'darkNavSection-ddOpen': this.state.showDropDown,
                 'darkNavSection-auth': this.props.userAuth,
               })}>
-                {renderIf(this.props.userAuth && this.state.showDropDown ,
-                  <div className='distanceContainer'>
-                  <div className='distance'>
-                    <p>7,3 km</p>
-                  </div>
-                  </div>
-                )}
-                {renderIf(this.props.userAuth,
-                  <div className='coins'>
-                    <p> 10.63 </p>
-                  </div>
-                )}
                 <img className={classToggler({
                   'navcoinlogo': true,
                   'extrapadding': !this.props.userAuth,
-                  })} src='https://i.imgur.com/ey72AKX.png' />
+                  })} src='https://i.imgur.com/2JEZwMg.png' />
               </div>
             </div>
             {renderIf(this.props.userAuth && this.state.showDropDown ,
               <div className='navPrimary-dropdown'>
                 <ul className='navPrimary-menu'>
                   <li className='navPrimary-li'>
-                    <Link to='/dashboard' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/OPUUc13.png' className='navIcons dbicon'/> <span>DASHBOARD</span></Link>
+                    <Link to='/dashboard' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/XTJXBjm.png' className='face icon'/> <span>Face Verfication</span></Link>
                   </li>
                   <li className='navPrimary-li'>
-                    <Link to='/map' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/gxfbqpg.png' className='navIcons mapicon'/> <span>MAP</span></Link>
+                    <Link to='/map' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/JapLSsM.png' className='id icon'/> <span>ID Verfication</span></Link>
                   </li>
                   <li className='navPrimary-li dc-li'>
-                    <Link to='/dailychallenge' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/KgDT2nR.png' className='navIcons dcicon'/> <span>DAILY</span> <br className='break'/> <span className='indentSmall'>CHALLENGE</span></Link>
+                    <Link to='/dailychallenge' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/4j2hJcK.png' className='voice icon'/> <span>Voice Verfication</span> </Link>
                   </li>
                   <li className='navPrimary-li'>
-                    <Link to='/mywallet' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/Bnd3w7M.png' className='navIcons walleticon'/> <span>MY WALLET</span></Link>
+                    <Link to='/mywallet' className='navPrimary-li-text' onClick={() => this.setState({ showDropDown: false })}><img src='https://i.imgur.com/qfqfUTk.png' className='records icon'/> <span>MY Records</span></Link>
                   </li>
                 </ul>
                 <p className='button oauthbuttonText lightBlueRev logoutButton' onClick={this.handleSignOut}><span>LOG OUT</span></p>
@@ -113,9 +101,7 @@ class Navbar extends React.Component {
                 {renderIf(this.state.authFormAction =='Sign In',
                   <p>Sign in</p>
                 )}
-                {renderIf(this.state.authFormAction =='Register',
-                  <p>Register</p>
-                )}
+
               </div>
               <div className='oauthDiv'>
                 <div className='oauthButtonContainer'>

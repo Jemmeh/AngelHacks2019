@@ -43,9 +43,6 @@ class Intro extends React.Component {
           <p>
             click the button below to  signup or sign in!
           </p>
-          <button className='button' onClick={() => this.setState({formDisplay: true})}id="start-button" >
-            START
-          </button>
         </section>
         <div>
           {renderIf(this.state.formDisplay,

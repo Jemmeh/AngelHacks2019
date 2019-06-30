@@ -1,6 +1,6 @@
 // @import './../lib/vars'; 
 header {
-  background-color: #FFF;
+  background-color: rgba(255, 255, 255, 0.25);
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@ header {
   width: auto;
   position: relative;
   height: 50px;
-  background-color: #008FD7;
+  background-color: rgba(140, 82, 255, 100);
   overflow: hidden;
   padding: 7.5px 0 0 19px;
   z-index: 1000;
@@ -63,7 +63,7 @@ header {
   position: absolute;
   width: 20px;
   height: 3px;
-  background: #FFF;
+  background: rgba(255, 255, 255, 100);
   left: 0;
   opacity: 1;
   -webkit-transform: rotate(0);
@@ -106,7 +106,7 @@ header {
   min-height: 100vh;
   width: 85vw;
   padding: 7.5px 0 0 19px;
-  background-color: #fff;
+  background-color: rgb(235, 235, 235);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -117,7 +117,7 @@ header {
 .navShadow {
   width: 100%;
   margin-bottom: 40px;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,.25);
+  box-shadow: 0 1px 4px 0 rgba(124, 124, 124, 0.25);
   position: fixed;
   z-index: 500;
   height: 70px;
@@ -134,14 +134,14 @@ header {
   height: 100%;
 }
 .navPrimary-li {
-  text-align: left;
+  text-align: right;
   width: auto;
 }
 .navPrimary-li-text {
   display: block;
   text-decoration: none;
-  color: #008FD7;
-  font-size: 22px;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
   line-height: 1;
   padding: 10px 25px;
   text-transform: uppercase;
@@ -151,13 +151,13 @@ header {
   cursor: pointer;
 }
 .navPrimary-li-text:hover {
-  color: #3c3c3c;
+  color: rgba(0, 0, 0, 0.25);
 }
 .buttonAuthFormParentDiv {
   text-align: center;
 }
 .darkNavSection {
-  background-color: #153F90;
+  background-color: rgb(62, 11, 163);
   position: absolute;
   top: 0;
   right: 0;
@@ -176,21 +176,23 @@ header {
 .signInBanner {
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
   text-align: center;
-  padding: 5px 0;
-  margin-bottom: 10px;
+  padding: 10px 0;
+  margin-bottom: 15px;
+
 
   p {
     font-weight: 500;
     color: #646462;
+    padding: 5px 0;
   }
 }
 .darkNavSection-auth {
-  background-color: #153F90;
+  background-color: rgb(62, 11, 163);
   position: absolute;
   top: 0;
   right: 0;
   height: 50px;
-  width: 140px;
+  width: 50px;
   text-align: right;
 
   .coins {
@@ -250,7 +252,7 @@ header {
   min-height: 64px;
 
   .navPrimary-li-text{
-    text-align: left;
+    text-align: center;
 
     img {
       height: 40px;
@@ -397,9 +399,6 @@ input:active, input:focus {
   }
   .navPrimary-li .navPrimary-li-text .dcicon {
     bottom: inherit;
-  }
-  .dc-li {
-    margin-bottom: 22px !important;
   }
 }
 @media (min-width: 400px) {

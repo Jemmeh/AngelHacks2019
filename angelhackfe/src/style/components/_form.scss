@@ -29,10 +29,22 @@
         font-size: 15px;
       }
     }
+    img {
+      height: 25px;
+      margin-top: 12.5px;
+    }
   }
   .afLogodiv {
     margin: 15px;
     text-align: center;
+    div {
+      height: 40px;
+
+      img {
+        height: 30px;
+        margin-top: 5px;
+      }
+    }
     p {
       text-align: center;
       display: inline-block;
@@ -52,6 +64,11 @@
         font-weight: 700;
         margin-right: 3px;
       }
+    }
+    .sectionHeader {
+      text-align: center;
+      color: #3a3b3f;
+      font-weight: 600;
     }
   }
   
@@ -84,6 +101,7 @@
           font-weight: 600;
           letter-spacing: .5px;
           line-height: 39px;
+          font-size: 18px;
         }
         .readyButton {
           background: #90949c;

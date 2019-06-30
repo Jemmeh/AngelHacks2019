@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 import { signUpRequest, signInRequest } from '../../actions/userAuth-actions.js';
 import { userProfileFetchRequest } from '../../actions/userProfile-actions.js';
+import { allAuthFetch } from '../../actions/allAuth-actions.js';
 import Modal from '../helpers/modal';
 import UserAuthForm from '../userAuth-form';
 import { logError, renderIf } from './../../lib/util.js';
@@ -11,11 +12,11 @@ import { logError, renderIf } from './../../lib/util.js';
 class Intro extends React.Component {
   constructor(props){
     super(props);
-    this.state = { authFormAction: 'Sign Up', formDisplay: false, step: 0 };
+    this.state = { authFormAction: 'Sign Up', formDisplay: false, step: 0, hide: false };
   }
 
   componentWillUnmount() {
-    this.setState({ authFormAction: 'Sign Up', formDisplay: false, step: 0 });
+    this.setState({ authFormAction: 'Sign Up', formDisplay: false, step: 0, hide: false });
   }
 
   handleSignin = (user, errCB) => {
@@ -43,13 +44,15 @@ class Intro extends React.Component {
     });
   };
 
-  // handleStep = num => {
-  //   setTimeout(() => this.setState({ step: num }), 3000);
-  // };
+  handleStep = num => {
+    setTimeout(() => this.setState({ step: num }), 3000);
+  };
 
   render() {
     let handleComplete = this.state.authFormAction === 'Sign Up' ? this.handleSignup : this.handleSignin;
     const drsImage = require("./../helpers/assets/drs.jpg");
+    const letters = require("./../helpers/assets/letters.png");
+    let bool = this.state.step === 5 ? true : false;
     return (
       // <div className="intro">
       //   <section id="introView" className="view introView">
@@ -81,7 +84,8 @@ class Intro extends React.Component {
       <div>
         <div className='entryPage'>
           <img src={drsImage} className='drsImage' />
-          <div className='blueSquare'><span>MC</span></div>
+          {/* <div className='blueSquare'><span>MC</span></div> */}
+          <div className='blueSquare'><img src={letters}/></div>
           <div className='entryText'>
             <p>My Chart lets you access your <br/> medical records from the <br/>comfort of your own home.</p>
           </div>
@@ -94,7 +98,7 @@ class Intro extends React.Component {
         </div>
         {renderIf(this.state.formDisplay,
             <div>
-              <Modal heading='Olympic App' authFormAction={this.state.authFormAction} close={() => this.setState({ formDisplay: false })}>
+              <Modal heading='Olympic App' authFormAction={this.state.authFormAction} close={() => this.setState({ formDisplay: false })} step={this.state.step}>
                 {renderIf(this.state.formDisplay && !this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth,
                   <div>
                     <UserAuthForm authFormAction={this.state.authFormAction} onComplete={handleComplete} />
@@ -111,12 +115,53 @@ class Intro extends React.Component {
                     )}
                     {renderIf(this.state.formDisplay && this.props.userAuth && !this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
                       <div className='facialStep authStep'>
-                        <p className='authStepHead'>Facial Verification</p>
-
+                        {/* after verified face,   call this.handleStep(2) */}
                         <p className='authStepDetail'>
                           Look straight at the screen.
                         </p>
                       </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 1,
+                      <div className='loadingDiv'>
+                        <p><span className='scale-up-center'></span>checking</p>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 2,
+                      <div className='stepDiv step2'>
+                        <label><input type="radio" checked={true} editable={false}/> Face</label>
+                        <label><input type="radio" editable={false}/> ID</label>
+                        <button onClick={() => this.setState({ step: 3 })}>Next</button>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 3,
+                      <div className='idStep authStep'>
+                        <p className='authStepHead'>ID Verification</p>
+                        {/* after verified face,   set this.state.step 4 */}
+                        <p className='authStepDetail'>
+                          On a flat surface photograph the front of your ID.
+                        </p>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && !this.props.licenseAuth && this.state.step === 4,
+                      <div className='idStep authStep'>
+                        <p className='authStepHead'>ID Verification</p>
+                        {/* after verified license,   call this.handleStep(5) */}
+                        <p className='authStepDetail'>
+                          On a flat surface photograph the back of your ID.
+                        </p>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && this.props.licenseAuth && this.state.step === 4,
+                      <div className='loadingDiv'>
+                        <p><span className='scale-up-center'></span>checking</p>
+                      </div>
+                    )}
+                    {renderIf(this.state.formDisplay && this.props.userAuth && this.props.imgAuth && this.props.licenseAuth && this.state.step === 5,
+                      <div className='stepDiv step2'>
+                        <label><input type="radio" checked={true} editable={false}/> Face</label>
+                        <label><input type="radio" checked={true} editable={false}/> ID</label>
+                      <button onClick={this.props.allAuthFetchReq(bool)}>Next</button>
+                    </div>
                     )}
                   </div>
                 )}
@@ -140,6 +185,7 @@ let mapDispatchToProps = dispatch => {
     signUp: user => dispatch(signUpRequest(user)),
     signIn: user => dispatch(signInRequest(user)),
     userProfileFetch: () => dispatch(userProfileFetchRequest()),
+    allAuthFetchReq: bool => dispatch(allAuthFetch(bool)),
   };
 };
 

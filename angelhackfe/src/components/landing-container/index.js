@@ -28,10 +28,10 @@ class LandingContainer extends React.Component {
     let profileAction ='create';
     return (
       <section className='landingContainer container-outer'>
-        {renderIf(!this.props.userAuth || !this.props.imgAuth || !this.props.licenseAuth,
+        {renderIf(!this.props.allAuth,
             <Intro />
         )}
-        {renderIf(this.props.userAuth && this.props.imgAuth && this.props.licenseAuth,
+        {renderIf(this.props.allAuth,
           <div>
             <p> Logged in! </p>
             {renderIf(this.state.profileFormDisplay && this.props.userProfile && this.props.userProfile.lastLogin === this.props.userProfile.createdOn,
@@ -41,7 +41,7 @@ class LandingContainer extends React.Component {
             )}
           </div>
         )}
-        <Video />
+        {/* <Video /> */}
       </section>
     );
   }
@@ -51,6 +51,7 @@ let mapStateToProps = state => ({
   userAuth: state.userAuth,
   imgAuth: state.imgAuth,
   licenseAuth: state.licenseAuth,
+  allAuth: state.allAuth,
   userProfile: state.userProfile,
 });
 

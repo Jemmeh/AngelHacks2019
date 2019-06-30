@@ -81,8 +81,10 @@ class Video extends React.Component {
           valid = confidence > num ? 1 : 0;
           console.log("val :", valid);
           if (valid) {
-            bool1 = true;
-            this.props.licenseAuthFetchReq(bool1);
+            if (this.props.imgAuth) {
+              bool1 = true;
+              this.props.licenseAuthFetchReq(bool1);
+            }
             imgs.img1 === null
               ? (imgs.img1 = imageBytes)
               : (imgs.img2 = imageBytes);
